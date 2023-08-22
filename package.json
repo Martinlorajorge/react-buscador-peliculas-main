@@ -1,5 +1,6 @@
 {
   "name": "react-buscador-peliculas",
+  "homepage": "https://martinlorajorge.github.io/react-buscador-peliculas-main/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +10,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "just-debounce-it": "^3.2.0",
