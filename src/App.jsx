@@ -5,7 +5,7 @@ import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 import debounce from 'just-debounce-it'
 
-// import { useRef } from 'react' // valor que persiste entre render
+
 
 function useSearch () {
   const [search, updateSearch] = useState('')
@@ -47,11 +47,12 @@ function App () {
   const { search, updateSearch, error } = useSearch()
   const { movies, getMovies, loading } = useMovies({ search, sort })
 
-  const debouncedGetMovies = useCallback(
-    debounce(search => {
-      getMovies({ search })
-    }, 500)
-    , [getMovies]
+  // esto hace que espere unos milisegundos antes de realizar la búsqueda
+  const debouncedGetMovies = useCallback(debounce(
+    search => {
+      getMovies({search})
+    },500)
+    ,[]
   )
 
   const handleSubmit = (event) => {

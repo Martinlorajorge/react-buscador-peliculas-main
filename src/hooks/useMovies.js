@@ -5,7 +5,7 @@ export function useMovies ({ search, sort }) {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const previousSearch = useRef(search) // Evita la misma busqueda
+  const previousSearch = useRef(search) // Evita la misma búsqueda
 
   // Hace lo mismo que el useMemo pero pensado en funciones de funciones
   const getMovies = useCallback(
@@ -32,5 +32,5 @@ export function useMovies ({ search, sort }) {
       : movies
   }, [sort, movies])
 
-  return { movies: sortedMovies, getMovies, loading }
+  return { movies: sortedMovies, getMovies, loading, error }
 }
