@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import './App.css'
 
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
+import debounce from 'just-debounce-it'
 
 // import { useRef } from 'react' // valor que persiste entre render
 
@@ -42,21 +43,33 @@ function App () {
   // https://www.omdbapi.com/?apikey=79ff1ca3&s=avengers
   // API-Key: 79ff1ca3
   // const inputRef = useRef()
+  const [sort, setSort] = useState(false)
   const { search, updateSearch, error } = useSearch()
-  const { movies, getMovies, loading } = useMovies({ search })
+  const { movies, getMovies, loading } = useMovies({ search, sort })
+
+  const debouncedGetMovies = useCallback(
+    debounce(search => {
+      getMovies({ search })
+    }, 500)
+    , [getMovies]
+  )
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    getMovies()
+    getMovies({ search })
     // console.log(search)
     // const { query } = Object.fromEntries(new window.FormData(event.target))
   }
 
+  const handleSort = () => {
+    setSort(!sort)
+  }
+
   const handleChange = (event) => {
-    // const newQuery = event.target.value
-    // if (newQuery.startsWith(' ')) return // Sie empieza con ' ' no deja poner espacio al comienzo
-    updateSearch(event.target.value)
+    const newSearch = event.target.value
+    updateSearch(newSearch)
+    debouncedGetMovies(newSearch)
   }
 
   return (
@@ -66,6 +79,7 @@ function App () {
         <h1>Buscador de Películas</h1>
         <form className='form' onSubmit={handleSubmit}>
           <input style={{ border: '1px solid transparent', borderColor: error ? 'red' : 'transparent' }} onChange={handleChange} value={search} name='search' placeholder='Avengers, Star Wars, The Matrix...' />
+          <input type='checkbox' onChange={handleSort} checked={sort} />
           <button type='submit'>Buscar</button>
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
